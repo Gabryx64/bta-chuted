@@ -1,0 +1,58 @@
+{
+	"schemaVersion": 1,
+	"id": "chuted",
+	"version": "${version}",
+	"name": "Chuted",
+	"description": "Chutes!!!!!!",
+	"authors": [
+		"Gabryx64"
+	],
+	"contact": {
+		"homepage": "https://github.com/Gabryx64/bta-chuted",
+		"sources": ""
+	},
+	"license": "Zlib",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			{
+				"adapter": "kotori_scala",
+				"value": "com.github.gabryx64.chuted.ChutedMod"
+			}
+		],
+		"beforeGameStart": [
+			{
+				"adapter": "kotori_scala",
+				"value": "com.github.gabryx64.chuted.ChutedMod"
+			}
+		],
+		"afterGameStart": [
+			{
+				"adapter": "kotori_scala",
+				"value": "com.github.gabryx64.chuted.ChutedMod"
+			}
+		],
+		"recipesReady": [
+			{
+				"adapter": "kotori_scala",
+				"value": "com.github.gabryx64.chuted.ChutedRecipes"
+			}
+		],
+    "initModels": [
+      {
+        "adapter": "kotori_scala",
+        "value": "com.github.gabryx64.chuted.ChutedModels"
+      }
+    ]
+	},
+	"mixins": [
+      "chuted.mixins.json"
+	],
+	"depends": {
+		"minecraft": "~7.3",
+		"fabricloader": ">=0.15.5",
+		"kotori_scala": ">=2.1.0",
+		"halplibe": ">=${halplibe}"
+	},
+	"suggests": {}
+}

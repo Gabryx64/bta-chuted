@@ -1,0 +1,30 @@
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        gradlePluginPortal()
+        maven {
+            name = 'Jitpack'
+            url = 'https://jitpack.io'
+        }
+        maven {
+            name = 'Babric'
+            url = 'https://maven.glass-launcher.net/babric'
+        }
+        maven {
+            name = 'SignalumMavenInfrastructure'
+            url = 'https://maven.thesignalumproject.net/infrastructure'
+        }
+        maven {
+            name = 'SignalumMavenReleases'
+            url = 'https://maven.thesignalumproject.net/releases'
+        }
+    }
+
+    plugins {
+        id 'fabric-loom' version '1.7.bta'
+        id 'scala'
+    }
+}

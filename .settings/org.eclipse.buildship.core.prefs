@@ -1,0 +1,13 @@
+arguments=--init-script /home/lina/.cache/jdtls/config/org.eclipse.osgi/118/0/.cp/gradle/init/init.gradle
+auto.sync=false
+build.scans.enabled=false
+connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)
+connection.project.dir=
+eclipse.preferences.version=1
+gradle.user.home=
+java.home=/nix/store/fvvrs66f430kk0ns48ysm029h4z7spac-openjdk-21.0.5+11/lib/openjdk
+jvm.arguments=
+offline.mode=false
+override.workspace.settings=true
+show.console.view=true
+show.executions.view=true
