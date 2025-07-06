@@ -128,54 +128,53 @@ extension (self: TileEntity & Container) {
     if self == null || !other_entity.isInstanceOf[Container] then return false
 
     val other = other_entity.asInstanceOf[TileEntity & Container]
-    for srcSlot <- self.getSlotsFromSource do {
-      other.getDestSlot(self.getItem(srcSlot), self.y > other.y) match {
-        case Some(destSlot) =>
-          other.putItemIntoSlot(self.removeItem(srcSlot, 1), destSlot)
-          return true
-        case _ =>
+    boundary {
+      for srcSlot <- self.getSlotsFromSource do {
+        other.getDestSlot(self.getItem(srcSlot), self.y > other.y) match {
+          case Some(destSlot) =>
+            other.putItemIntoSlot(self.removeItem(srcSlot, 1), destSlot)
+            break(true)
+          case _ =>
+        }
       }
+      false
     }
-    false
   }
 
   def <><(other: TileEntity): Boolean = {
-    other match {
-      case basket: TileEntityBasket => return fromBasket(basket)
-      case _                        =>
-    }
     if !other.isInstanceOf[Container] then return false
-
     other.asInstanceOf[TileEntity & Container] ><> self
   }
 
   def ><>(other: Entity & Container): Boolean = {
-    other match {
-      case basket: TileEntityBasket => return toBasket(basket)
-      case _                        =>
-    }
     if other == null then return false
-    for srcSlot <- self.getSlotsFromSource do {
-      containerDestSlot(other, self.getItem(srcSlot)) match {
-        case Some(destSlot) =>
-          itemIntoContainerSlot(other, self.removeItem(srcSlot, 1), destSlot)
-          return true
-        case _ =>
+
+    boundary {
+      for srcSlot <- self.getSlotsFromSource do {
+        containerDestSlot(other, self.getItem(srcSlot)) match {
+          case Some(destSlot) =>
+            itemIntoContainerSlot(other, self.removeItem(srcSlot, 1), destSlot)
+            break(true)
+          case _ =>
+        }
       }
+      false
     }
-    false
   }
 
   def <><(other: Entity & Container): Boolean = {
     if self == null || other == null then return false
-    for srcSlot <- slotsFromContainer(other) do {
-      self.getDestSlot(other.getItem(srcSlot), self.y > other.y) match {
-        case Some(destSlot) =>
-          self.putItemIntoSlot(other.removeItem(srcSlot, 1), destSlot)
-          return true
-        case _ =>
+
+    boundary {
+      for srcSlot <- slotsFromContainer(other) do {
+        self.getDestSlot(other.getItem(srcSlot), self.y > other.y) match {
+          case Some(destSlot) =>
+            self.putItemIntoSlot(other.removeItem(srcSlot, 1), destSlot)
+            break(true)
+          case _ =>
+        }
       }
+      false
     }
-    false
   }
 }
