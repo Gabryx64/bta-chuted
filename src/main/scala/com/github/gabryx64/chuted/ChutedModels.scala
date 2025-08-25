@@ -1,12 +1,12 @@
 package com.github.gabryx64.chuted
 
 import net.minecraft.client.render.block.color.BlockColorDispatcher
+import net.minecraft.client.render.block.model.BlockModelDispatcher
+import net.minecraft.client.render.item.model.ItemModelDispatcher
 import net.minecraft.client.render.{
   EntityRenderDispatcher,
   TileEntityRenderDispatcher
 }
-import net.minecraft.client.render.block.model.BlockModelDispatcher
-import net.minecraft.client.render.item.model.ItemModelDispatcher
 import net.minecraft.core.util.helper.Side
 import turniplabs.halplibe.helper.ModelHelper
 import turniplabs.halplibe.util.ModelEntrypoint
@@ -17,7 +17,7 @@ object ChutedModels extends ModelEntrypoint {
       ChutedBlocks.chute,
       () =>
         new BlockModelChute(ChutedBlocks.chute)
-          .setTex(0, s"${ChutedMod.MODID}:block/chute", Side.sides*)
+          .setTex(0, s"${ChutedMod.MODID}:block/chute_item", Side.sides*)
     )
   }
 

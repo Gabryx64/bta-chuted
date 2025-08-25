@@ -1,18 +1,18 @@
 package com.github.gabryx64.chuted
 
 import com.mojang.nbt.tags.CompoundTag
-import net.minecraft.core.player.inventory.container.Container
-import net.minecraft.core.entity.Entity
 import net.minecraft.core.block.entity.{
   TileEntity,
   TileEntityBasket,
   TileEntityFurnace,
   TileEntityTrommel
 }
+import net.minecraft.core.entity.Entity
 import net.minecraft.core.item.{Item, ItemStack}
+import net.minecraft.core.player.inventory.container.Container
 
 import scala.util.boundary
-import boundary.break
+import scala.util.boundary.break
 
 private def slotsFromContainer(self: Container): IndexedSeq[Int] = {
   for i <- 0 until self.getContainerSize if self.getItem(i) != null

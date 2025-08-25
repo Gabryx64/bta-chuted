@@ -1,14 +1,16 @@
 package com.github.gabryx64.chuted
 
-import net.minecraft.core.block.{Block, BlockLogic}
+import net.minecraft.core.block.entity.TileEntityActivator
 import net.minecraft.core.block.material.Material
+import net.minecraft.core.block.{Block, BlockLogic}
 import net.minecraft.core.entity.Mob
 import net.minecraft.core.entity.player.Player
 import net.minecraft.core.enums.PlacementMode
 import net.minecraft.core.item.Item
 import net.minecraft.core.player.inventory.container.Container
-import net.minecraft.core.util.helper.Side
+import net.minecraft.core.util.helper.{Direction, Side}
 import net.minecraft.core.world.World
+import turniplabs.halplibe.helper.ModelHelper
 
 class BlockLogicChute(b: Block[?]) extends BlockLogic(b, Material.metal) {
   override def isSolidRender: Boolean = false
@@ -61,9 +63,31 @@ class BlockLogicChute(b: Block[?]) extends BlockLogic(b, Material.metal) {
     yHit: Double
   ): Boolean = if world.isClientSide then true
   else {
-    player.displayContainerScreen(
-      world.getTileEntity(x, y, z).asInstanceOf[Container]
-    )
+    world.getTileEntity(x, y, z) match {
+      case te: TileEntityChute =>
+        te.isLocked = !te.isLocked
+        world.notifyBlockChange(x, y, z, ChutedBlocks.chute.id)
+
+      case _ =>
+    }
     true
+  }
+
+  override def onActivatorInteract(
+    world: World,
+    x: Int,
+    y: Int,
+    z: Int,
+    activator: TileEntityActivator,
+    direction: Direction
+  ): Unit = {
+    super.onActivatorInteract(world, x, y, z, activator, direction)
+    world.getTileEntity(x, y, z) match {
+      case te: TileEntityChute =>
+        te.isLocked = !te.isLocked
+        world.notifyBlockChange(x, y, z, ChutedBlocks.chute.id)
+
+      case _ =>
+    }
   }
 }

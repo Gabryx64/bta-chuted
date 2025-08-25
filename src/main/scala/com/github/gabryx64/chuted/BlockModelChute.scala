@@ -1,14 +1,17 @@
 package com.github.gabryx64.chuted
 
-import net.minecraft.client.render.block.model.{BlockModel, BlockModelStandard}
-import net.minecraft.core.block.{Block, BlockLogic}
-import net.fabricmc.api.Environment
-import net.fabricmc.api.EnvType
+import net.fabricmc.api.{EnvType, Environment}
 import net.minecraft.client.render.block.color.{
   BlockColor,
   BlockColorDispatcher
 }
+import net.minecraft.client.render.block.model.{BlockModel, BlockModelStandard}
 import net.minecraft.client.render.tessellator.Tessellator
+import net.minecraft.client.render.texture.stitcher.{
+  IconCoordinate,
+  TextureRegistry
+}
+import net.minecraft.core.block.{Block, BlockLogic}
 import net.minecraft.core.util.helper.Side
 import net.minecraft.core.util.phys.AABB
 import org.lwjgl.opengl.GL11
@@ -16,6 +19,11 @@ import org.lwjgl.opengl.GL11
 @Environment(EnvType.CLIENT)
 class BlockModelChute[T <: BlockLogic](b: Block[T])
   extends BlockModelStandard[T](b) {
+  private val texture =
+    TextureRegistry.getTexture(s"${ChutedMod.MODID}:block/chute")
+  private val itemTexture =
+    TextureRegistry.getTexture(s"${ChutedMod.MODID}:block/chute_item")
+
   override def render(
     tessellator: Tessellator,
     x: Int,
@@ -25,6 +33,7 @@ class BlockModelChute[T <: BlockLogic](b: Block[T])
     val bounds = block.getBounds
     val onePix = 0.0625
 
+    setTex(0, texture, Side.sides*)
     bounds.set(0, 0.5 + onePix, 0, 1, 0.5 + onePix * 2, 1)
     renderStandardBlock(tessellator, bounds, x, y, z)
 
@@ -66,6 +75,16 @@ class BlockModelChute[T <: BlockLogic](b: Block[T])
       0.5 + onePix * 2
     )
     renderStandardBlock(tessellator, bounds, x, y, z)
+
+    if BlockModel.renderBlocks.blockAccess
+        .getTileEntity(x, y, z)
+        .asInstanceOf[TileEntityChute]
+        .isLocked
+    then {
+      bounds.set(0, 0, 0, 1, 1, 1)
+      setTex(0, itemTexture, Side.sides*)
+      return true
+    }
 
     Side.getSideById(
       BlockModel.renderBlocks.blockAccess.getBlockMetadata(x, y, z)
@@ -117,12 +136,14 @@ class BlockModelChute[T <: BlockLogic](b: Block[T])
         )
       case _ =>
         bounds.set(0, 0, 0, 1, 1, 1)
+        setTex(0, itemTexture, Side.sides*)
         return true
     }
 
     renderStandardBlock(tessellator, bounds, x, y, z)
 
     bounds.set(0, 0, 0, 1, 1, 1)
+    setTex(0, itemTexture, Side.sides*)
     true
   }
 

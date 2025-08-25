@@ -1,9 +1,8 @@
 package com.github.gabryx64.chuted
 
-import net.minecraft.core.block.BlockLogicFullyRotatable
 import net.minecraft.core.block.material.Material
 import net.minecraft.core.block.tag.BlockTags
-import net.minecraft.core.block.Block
+import net.minecraft.core.block.{Block, BlockLogicFullyRotatable}
 import net.minecraft.core.sound.BlockSounds
 import turniplabs.halplibe.helper.BlockBuilder
 import turniplabs.halplibe.util.TomlConfigHandler

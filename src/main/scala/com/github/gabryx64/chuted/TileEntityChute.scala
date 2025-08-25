@@ -2,22 +2,27 @@ package com.github.gabryx64.chuted
 
 import com.mojang.nbt.tags.{CompoundTag, ListTag}
 import net.minecraft.core.block.entity.TileEntity
+import net.minecraft.core.entity.EntityItem
 import net.minecraft.core.entity.player.Player
 import net.minecraft.core.entity.vehicle.EntityMinecart
 import net.minecraft.core.item.ItemStack
 import net.minecraft.core.player.inventory.container.Container
 import net.minecraft.core.util.helper.Side
 import net.minecraft.core.util.phys.AABB
+import net.minecraft.core.world.World
+
 import scala.jdk.CollectionConverters.*
 
 class TileEntityChute extends TileEntity with Container {
+  var isLocked                            = false
   private var contents: Option[ItemStack] = None
   private var itsSuckinTime               = false
   private var tickTimer: Int              = 1
 
-  override def getContainerSize: Int      = 1
-  override def getMaxStackSize: Int       = 64
+  override def getContainerSize: Int = 1
+
   override def getItem(i: Int): ItemStack = contents.orNull
+
   override def removeItem(i: Int, amount: Int): ItemStack = {
     contents match {
       case Some(x: ItemStack) =>
@@ -47,6 +52,8 @@ class TileEntityChute extends TileEntity with Container {
       contents = Some(itemStack)
   }
 
+  override def getMaxStackSize: Int = 64
+
   def sortContainer(): Unit = {}
 
   def stillValid(player: Player): Boolean =
@@ -65,6 +72,7 @@ class TileEntityChute extends TileEntity with Container {
       if comp.getByte("Slot").toInt == 0 then
         contents = Some(ItemStack.readItemStackFromNbt(comp))
     }
+    isLocked = nbttagcompound.getBoolean("Locked")
   }
 
   override def writeToNBT(nbttagcompound: CompoundTag): Unit = {
@@ -77,6 +85,7 @@ class TileEntityChute extends TileEntity with Container {
       tags.addTag(comp)
     }
     nbttagcompound.put("Items", tags)
+    nbttagcompound.putBoolean("Locked", isLocked)
   }
 
   override def tick(): Unit = {
@@ -110,7 +119,7 @@ class TileEntityChute extends TileEntity with Container {
                   this <>< ent
                 })
             }
-          else {
+          else if !isLocked then {
             val side = Side.getSideById(worldObj.getBlockMetadata(x, y, z))
             if !(this ><> worldObj.getTileEntity(
                 x + side.getOffsetX,
@@ -140,6 +149,20 @@ class TileEntityChute extends TileEntity with Container {
         } else tickTimer -= 1
 
       case _ =>
+    }
+  }
+
+  override def dropContents(world: World, x: Int, y: Int, z: Int): Unit = {
+    super.dropContents(world, x, y, z)
+    contents match {
+      case Some(itemStack: ItemStack) =>
+        val item = world.dropItem(x, y, z, itemStack)
+        item.xd *= 0.5f.toDouble
+        item.yd *= 0.5f.toDouble
+        item.zd *= 0.5f.toDouble
+        item.pickupDelay = 0
+
+      case None =>
     }
   }
 }
